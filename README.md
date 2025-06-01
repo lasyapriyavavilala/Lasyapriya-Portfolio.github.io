@@ -1,4 +1,4 @@
-👋 Hello All! Welcome to My GitHub Portfolio
+👋 Hello All! 
 Welcome to my professional portfolio — a curated collection of projects across Data Science, Machine Learning, and Data Engineering. 🚀📊🤖
 
 🎓 Education & 🧑‍💼 Professional Background
