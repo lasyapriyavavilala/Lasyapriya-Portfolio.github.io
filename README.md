@@ -15,4 +15,4 @@ Welcome to my professional portfolio — a curated collection of projects across
 → 🎓 Graduated: 2022
 
 Feel free to explore the repositories to see real-world implementations of my skills in ML, cloud, data pipelines, and beyond. 🌐✨
-Let’s connect on [LinkedIn!](https://www.linkedin.com/in/lasyapriya vavilala/)
+Let’s connect on LinkedIn!
