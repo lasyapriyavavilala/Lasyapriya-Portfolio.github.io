@@ -1,4 +1,4 @@
-===============================
+
 🛠️ Project Summary: Predictive Maintenance using Signal Processing & ML
 ===============================
 
@@ -25,7 +25,5 @@ PdM anticipates machinery failures before they occur, minimizing downtime and re
 - Performed using LSTM, Random Forest, and CNN-LSTM
 - RF yielded most accurate Remaining Useful Life (RUL) estimates
 
-📁 Report:
-Complete report in `docs/Final_ReportCSE572-Group12.pdf`
 
 This project showcases the end-to-end process of signal-based predictive maintenance — from raw sensor data to actionable predictions.
