@@ -1,0 +1,101 @@
+-- Create Locations Table
+CREATE TABLE Locations (
+    Location_ID INT NOT NULL PRIMARY KEY,
+    Location_Name VARCHAR(100) NOT NULL
+);
+
+-- Create Platforms Table
+CREATE TABLE Platforms (
+    Platform_ID INT NOT NULL PRIMARY KEY,
+    Platform_Name VARCHAR(50) NOT NULL
+);
+
+-- Create Languages Table
+CREATE TABLE Languages (
+    Language_ID INT NOT NULL PRIMARY KEY,
+    Language_Name VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- Create Users Table
+CREATE TABLE Users (
+    User_ID INT NOT NULL PRIMARY KEY,
+    Username VARCHAR(50) NOT NULL,
+    Age INT CHECK (Age >= 13),
+    Gender CHAR(1),
+    Location_ID INT,
+    FOREIGN KEY (Location_ID) REFERENCES Locations(Location_ID)
+);
+
+-- Create Posts Table
+CREATE TABLE Posts (
+    Post_ID INT NOT NULL PRIMARY KEY,
+    User_ID INT NOT NULL,
+    Platform_ID INT NOT NULL,
+    Post_Content TEXT NOT NULL,
+    Language_ID INT,
+    Post_Date DATETIME NOT NULL,
+    Hashtags TEXT,
+    Keywords TEXT,
+    FOREIGN KEY (User_ID) REFERENCES Users(User_ID),
+    FOREIGN KEY (Platform_ID) REFERENCES Platforms(Platform_ID),
+    FOREIGN KEY (Language_ID) REFERENCES Languages(Language_ID)
+);
+
+-- Create Hashtags Table
+CREATE TABLE Hashtags (
+    Hashtag_ID INT NOT NULL PRIMARY KEY,
+    Hashtag_Text VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Create Keywords Table
+CREATE TABLE Keywords (
+    Keyword_ID INT NOT NULL PRIMARY KEY,
+    Keyword_Text VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Create Sentiment_Scores Table
+CREATE TABLE Sentiment_Scores (
+    Score_ID INT NOT NULL PRIMARY KEY,
+    Post_ID INT NOT NULL,
+    Sentiment_Score DECIMAL(3, 2) NOT NULL CHECK (Sentiment_Score BETWEEN -1.00 AND 1.00),
+    FOREIGN KEY (Post_ID) REFERENCES Posts(Post_ID)
+);
+
+-- Create Post_Analytics Fact Table
+CREATE TABLE Post_Analytics (
+    Analytics_ID INT NOT NULL PRIMARY KEY,
+    Post_ID INT NOT NULL,
+    Likes_Count INT NOT NULL DEFAULT 0,
+    Shares_Count INT NOT NULL DEFAULT 0,
+    Comments_Count INT NOT NULL DEFAULT 0,
+    Views_Count INT NOT NULL DEFAULT 0,
+    Engagement_Rate DECIMAL(5, 2) NOT NULL DEFAULT 0,
+    Analysis_Date DATETIME NOT NULL,
+    FOREIGN KEY (Post_ID) REFERENCES Posts(Post_ID)
+);
+
+-- Create Sentiment_Trends Fact Table
+CREATE TABLE Sentiment_Trends (
+    Trend_ID INT NOT NULL PRIMARY KEY,
+    Platform_ID INT NOT NULL,
+    Date DATE NOT NULL,
+    Avg_Sentiment DECIMAL(3, 2) NOT NULL CHECK (Avg_Sentiment BETWEEN -1.00 AND 1.00),
+    Post_Count INT NOT NULL DEFAULT 0,
+    Positive_Ratio DECIMAL(5, 2) NOT NULL CHECK (Positive_Ratio BETWEEN 0 AND 100),
+    Negative_Ratio DECIMAL(5, 2) NOT NULL CHECK (Negative_Ratio BETWEEN 0 AND 100),
+    Neutral_Ratio DECIMAL(5, 2) NOT NULL CHECK (Neutral_Ratio BETWEEN 0 AND 100),
+    FOREIGN KEY (Platform_ID) REFERENCES Platforms(Platform_ID)
+);
+
+
+-- Script to see the tables
+SELECT * FROM Locations;
+SELECT * FROM Platforms;
+SELECT * FROM Languages;
+SELECT * FROM Users;
+SELECT * FROM Keywords;
+SELECT * FROM Hashtags;
+SELECT * FROM Posts;
+SELECT * FROM Sentiment_Scores;
+SELECT * FROM Post_Analytics;
+SELECT * FROM Sentiment_Trends;

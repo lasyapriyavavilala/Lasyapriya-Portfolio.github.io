@@ -1,0 +1,38 @@
+-- Declare variables to hold data
+DECLARE @Post_ID INT, @Sentiment_Score DECIMAL(3, 2);
+
+-- Declare the cursor
+DECLARE MyCursor CURSOR FOR
+SELECT Post_ID, Sentiment_Score 
+FROM Sentiment_Scores
+WHERE Sentiment_Score <> 0; -- Only rows with a non-zero sentiment score
+
+-- Open the cursor
+OPEN MyCursor;
+
+-- Fetch the first row
+FETCH NEXT FROM MyCursor INTO @Post_ID, @Sentiment_Score;
+
+-- Loop through each row
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    -- Print the fetched data (or apply business logic)
+    PRINT 'Post ID: ' + CAST(@Post_ID AS VARCHAR) + ', Sentiment Score: ' + CAST(@Sentiment_Score AS VARCHAR);
+
+    -- Fetch the next row
+    FETCH NEXT FROM MyCursor INTO @Post_ID, @Sentiment_Score;
+END;
+
+-- Close and deallocate the cursor
+CLOSE MyCursor;
+DEALLOCATE MyCursor;
+
+
+
+--Drop Cursor Script
+-- Close and deallocate cursor if it exists
+IF CURSOR_STATUS('global', 'SentimentCursor') >= 0
+BEGIN
+    CLOSE SentimentCursor;
+    DEALLOCATE SentimentCursor;
+END;

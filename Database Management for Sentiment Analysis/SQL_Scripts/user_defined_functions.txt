@@ -1,0 +1,32 @@
+
+-- 2. User Defined Function (UDF)
+-- Purpose: A UDF to count the number of words in a given text.
+
+--Create UDF
+-- Drop the function if it exists
+IF OBJECT_ID('CalculateEngagementRate', 'FN') IS NOT NULL
+    DROP FUNCTION CalculateEngagementRate;
+GO
+
+-- Create the function
+CREATE FUNCTION CalculateEngagementRate
+    (@Likes INT, @Shares INT, @Views INT)
+RETURNS DECIMAL(5, 2)
+AS
+BEGIN
+    RETURN CASE 
+        WHEN @Views = 0 THEN 0.00
+        ELSE CAST((@Likes + @Shares) AS DECIMAL(5, 2)) / @Views * 100
+    END;
+END;
+GO
+
+
+-- Example in combination with Post_Analytics table
+SELECT Post_ID, 
+       dbo.CalculateEngagementRate(Likes_Count, Shares_Count, Views_Count) AS EngagementRate
+FROM Post_Analytics;
+
+-- Drop the function
+DROP FUNCTION CalculateEngagementRate;
+GO

@@ -1,0 +1,67 @@
+--Query for View 1, Positive Sentiment Posts by Platform, Explanation: This view lists posts with positive sentiment scores (Sentiment_Score > 0.5) for each platform.
+CREATE VIEW Positive_Posts_By_Platform AS
+SELECT 
+    ps.Post_ID,
+    p.Platform_Name,
+    ps.Post_Content,
+    ss.Sentiment_Score
+FROM 
+    Posts ps
+JOIN 
+    Platforms p ON ps.Platform_ID = p.Platform_ID
+JOIN 
+    Sentiment_Scores ss ON ps.Post_ID = ss.Post_ID
+WHERE 
+    ss.Sentiment_Score > 0.5; -- Restricting to positive sentiment
+GO
+SELECT * FROM Positive_Posts_By_Platform;
+
+GO
+
+--Query for View 2, Active Users with High Engagement, Explanation: This view identifies users whose posts have high engagement rates (Engagement_Rate > 10.0)
+CREATE VIEW Active_Users_With_Engagement AS
+SELECT 
+    u.Username,
+    SUM(pa.Likes_Count) AS Total_Likes,
+    SUM(pa.Shares_Count) AS Total_Shares,
+    SUM(pa.Comments_Count) AS Total_Comments
+FROM 
+    Users u
+JOIN 
+    Posts ps ON u.User_ID = ps.User_ID
+JOIN 
+    Post_Analytics pa ON ps.Post_ID = pa.Post_ID
+WHERE 
+    pa.Engagement_Rate > 10.0 -- Restricting to high engagement posts
+GROUP BY 
+    u.Username;
+GO
+SELECT * FROM Active_Users_With_Engagement;
+GO
+
+
+--Query for View 3, Active_User_Insights, Explanation:This view provides insights into user activity by showing their total posts, average sentiment score, and maximum views on any post.
+CREATE VIEW Active_User_Insights AS
+SELECT 
+    u.Username,
+    l.Location_Name,
+    COUNT(p.Post_ID) AS Total_Posts,
+    AVG(ss.Sentiment_Score) AS Avg_Sentiment,
+    MAX(pa.Views_Count) AS Max_Views
+FROM 
+    Users u
+JOIN 
+    Posts p ON u.User_ID = p.User_ID
+JOIN 
+    Locations l ON u.Location_ID = l.Location_ID
+JOIN 
+    Sentiment_Scores ss ON p.Post_ID = ss.Post_ID
+JOIN 
+    Post_Analytics pa ON p.Post_ID = pa.Post_ID
+WHERE 
+    p.Post_Date >= DATEADD(YEAR, -1, GETDATE())
+GROUP BY 
+    u.Username, l.Location_Name;
+GO
+SELECT * FROM Active_User_Insights
+GO

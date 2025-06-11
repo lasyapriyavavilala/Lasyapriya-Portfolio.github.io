@@ -1,0 +1,154 @@
+-- Creating an audit table for the Hashtags table, including triggers INSERT, UPDATE, and DELETE operations, as well as the test script to verify functionality.
+-- Step 1: Create the Hashtags Table
+-- Drop the Hashtags table if it already exists
+-- Drop Hashtags_Audit table if it exists
+IF OBJECT_ID('Hashtags_Audit', 'U') IS NOT NULL
+    DROP TABLE Hashtags_Audit;
+GO
+
+-- Drop Hashtags table if it exists
+IF OBJECT_ID('Hashtags', 'U') IS NOT NULL
+    DROP TABLE Hashtags;
+GO
+-- Step 2: Create the Hashtags Table
+-- Create the Hashtags table
+CREATE TABLE Hashtags (
+    Hashtag_ID INT IDENTITY(1,1) NOT NULL PRIMARY KEY, -- Auto-incrementing ID
+    Hashtag_Text NVARCHAR(100) NOT NULL UNIQUE        -- Unique hashtag text
+);
+GO
+-- Step 3: Create the Hashtags_Audit Table
+-- Create the Hashtags_Audit table
+CREATE TABLE Hashtags_Audit (
+    Audit_ID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,      -- Unique identifier for each audit entry
+    Hashtag_ID INT NOT NULL,                              -- Reference to the original Hashtag_ID
+    Operation_Type NVARCHAR(10) NOT NULL,                 -- Type of operation: 'INSERT', 'UPDATE', 'DELETE'
+    Hashtag_Text NVARCHAR(100),                           -- The hashtag text being audited
+    Change_Timestamp DATETIME DEFAULT GETDATE()           -- Timestamp of the operation
+);
+GO
+--Step 4: Create Triggers for the Hashtags Table
+--Trigger for INSERT Operations
+CREATE TRIGGER trg_Hashtags_Insert
+ON Hashtags
+AFTER INSERT
+AS
+BEGIN
+    INSERT INTO Hashtags_Audit (Hashtag_ID, Operation_Type, Hashtag_Text, Change_Timestamp)
+    SELECT 
+        inserted.Hashtag_ID, 
+        'INSERT', 
+        inserted.Hashtag_Text, 
+        GETDATE()
+    FROM 
+        inserted;
+END;
+GO
+
+
+--Step 1: Drop the Tables if They Exist
+-- Drop Hashtags_Audit table if it exists
+IF OBJECT_ID('Hashtags_Audit', 'U') IS NOT NULL
+    DROP TABLE Hashtags_Audit;
+GO
+
+-- Drop Hashtags table if it exists
+IF OBJECT_ID('Hashtags', 'U') IS NOT NULL
+    DROP TABLE Hashtags;
+GO
+
+--Step 2: Create the Hashtags Table
+
+-- Create the Hashtags table
+CREATE TABLE Hashtags (
+    Hashtag_ID INT IDENTITY(1,1) NOT NULL PRIMARY KEY, -- Auto-incrementing ID
+    Hashtag_Text NVARCHAR(100) NOT NULL UNIQUE        -- Unique hashtag text
+);
+GO
+
+--Step 3: Create the Hashtags_Audit Table
+-- Create the Hashtags_Audit table
+CREATE TABLE Hashtags_Audit (
+    Audit_ID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,      -- Unique identifier for each audit entry
+    Hashtag_ID INT NOT NULL,                              -- Reference to the original Hashtag_ID
+    Operation_Type NVARCHAR(10) NOT NULL,                 -- Type of operation: 'INSERT', 'UPDATE', 'DELETE'
+    Hashtag_Text NVARCHAR(100),                           -- The hashtag text being audited
+    Change_Timestamp DATETIME DEFAULT GETDATE()           -- Timestamp of the operation
+);
+GO
+--Step 4: Create Triggers for the Hashtags Table
+--Trigger for INSERT Operations
+
+CREATE TRIGGER trg_Hashtags_Insert
+ON Hashtags
+AFTER INSERT
+AS
+BEGIN
+    INSERT INTO Hashtags_Audit (Hashtag_ID, Operation_Type, Hashtag_Text, Change_Timestamp)
+    SELECT 
+        inserted.Hashtag_ID, 
+        'INSERT', 
+        inserted.Hashtag_Text, 
+        GETDATE()
+    FROM 
+        inserted;
+END;
+GO
+--Trigger for UPDATE Operations
+CREATE TRIGGER trg_Hashtags_Update
+ON Hashtags
+AFTER UPDATE
+AS
+BEGIN
+    INSERT INTO Hashtags_Audit (Hashtag_ID, Operation_Type, Hashtag_Text, Change_Timestamp)
+    SELECT 
+        inserted.Hashtag_ID, 
+        'UPDATE', 
+        inserted.Hashtag_Text, 
+        GETDATE()
+    FROM 
+        inserted;
+END;
+GO
+
+--Trigger for DELETE Operations
+CREATE TRIGGER trg_Hashtags_Delete
+ON Hashtags
+AFTER DELETE
+AS
+BEGIN
+    INSERT INTO Hashtags_Audit (Hashtag_ID, Operation_Type, Hashtag_Text, Change_Timestamp)
+    SELECT 
+        deleted.Hashtag_ID, 
+        'DELETE', 
+        deleted.Hashtag_Text, 
+        GETDATE()
+    FROM 
+        deleted;
+END;
+GO
+--Step 5: Test the Triggers
+--Insert Test Data into the Hashtags Table
+-- Insert test data into Hashtags
+INSERT INTO Hashtags (Hashtag_Text) VALUES 
+('#AI'), 
+('#BigData'), 
+('#CloudComputing');
+GO
+
+--Update Test Data in the Hashtags Table
+-- Update a row in Hashtags
+UPDATE Hashtags
+SET Hashtag_Text = '#ArtificialIntelligence'
+WHERE Hashtag_ID = 1;
+GO
+
+--Delete Test Data from the Hashtags Table
+-- Delete a row from Hashtags
+DELETE FROM Hashtags
+WHERE Hashtag_ID = 2;
+GO
+
+--Query the Hashtags_Audit table to verify the audit trail:
+SELECT * FROM Hashtags_Audit;
+GO

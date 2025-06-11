@@ -1,0 +1,27 @@
+--1. Stored Procedure
+--Purpose: A stored procedure to fetch all hashtags with a specified keyword in the Hashtag_Text.
+
+--Create Stored Procedure:
+-- Drop the stored procedure if it exists
+IF OBJECT_ID('GetHashtagsByKeyword', 'P') IS NOT NULL
+    DROP PROCEDURE GetHashtagsByKeyword;
+GO
+
+-- Create the stored procedure
+CREATE PROCEDURE GetHashtagsByKeyword
+    @Keyword NVARCHAR(50)
+AS
+BEGIN
+    SELECT Hashtag_ID, Hashtag_Text
+    FROM Hashtags
+    WHERE Hashtag_Text LIKE '%' + @Keyword + '%';
+END;
+GO
+
+-- Example 1: Fetch hashtags containing 'AI'
+EXEC GetHashtagsByKeyword @Keyword = 'AI';
+
+
+-- Drop the stored procedure
+DROP PROCEDURE GetHashtagsByKeyword;
+GO
