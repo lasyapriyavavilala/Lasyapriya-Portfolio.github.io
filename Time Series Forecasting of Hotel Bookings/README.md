@@ -1,5 +1,4 @@
-# 📊 Hotel Booking Demand Forecasting
-
+# 📊 Time Series Forecasting of Hotel Bookings to Optimize Resource Allocation and Pricing Strategies
 This project focuses on **forecasting hotel booking demand** using time series analysis. By analyzing past hotel booking data, we aim to help hotel managers make informed decisions regarding **resource allocation**, **pricing strategies**, and **seasonal planning**.
 
 
