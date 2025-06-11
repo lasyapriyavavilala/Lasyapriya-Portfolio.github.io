@@ -46,7 +46,8 @@ Run each SQL script in the following order using SQL Server 2012+:
 See the `screenshots/` directory for query results .
 
 ---
-
+Note: Please execute the tables with no reference to another table first so that there will be no FK error.
+---
 ## 🏁 Conclusion
 
 This database backend supports advanced querying, user behavior analysis, and social sentiment tracking.
