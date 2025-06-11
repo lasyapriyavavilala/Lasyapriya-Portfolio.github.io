@@ -1,4 +1,4 @@
-===============================
+
 📘 Project Summary: Sentiment Analysis on Social Media
 ===============================
 
@@ -18,7 +18,7 @@ This project implements a relational database system that supports:
 - High-performance querying and analytics.
 - Cross-platform analysis and real-time sentiment insights.
 
-=======================
+
 📊 Database Design
 =======================
 
@@ -36,7 +36,7 @@ This project implements a relational database system that supports:
 1. **Post_Analytics** – Aggregates post data (likes, shares, comments, views).
 2. **Sentiment_Trends** – Tracks sentiment trends over time (daily sentiment averages by platform).
 
-===========================
+
 🧠 Technologies Used:
 ===========================
 - **SQL Server 2012**
