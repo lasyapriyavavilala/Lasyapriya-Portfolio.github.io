@@ -42,7 +42,7 @@ For live access (e.g., during judging):
 **Note**: Replace tokens with env vars for security—never commit them!
 
 ## 📸 Screenshots
-
+Uploaded screenshots of images collected from Roboflow
 
 ## 🏆 Accomplishments & Challenges
 - Integrated CrewAI for agent-based reasoning—turns raw detection into actionable insights.
