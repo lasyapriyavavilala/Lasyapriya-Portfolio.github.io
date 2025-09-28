@@ -37,7 +37,7 @@ For live access (e.g., during judging):
 1. Install ngrok: `pip install pyngrok`
 2. Set your ngrok token: `ngrok.set_auth_token("your_ngrok_token")`
 3. In a script or terminal: `ngrok http 8501`
-4. Share the public URL ([Streamlit Link](https://nonpertinent-emmie-nonuniversally.ngrok-free.dev/)).
+4. Share the public URL ([Streamlit Link](https://nonhallucinatory-renae-unlauded.ngrok-free.dev/)).
 
 **Note**: Replace tokens with env vars for security—never commit them!
 
