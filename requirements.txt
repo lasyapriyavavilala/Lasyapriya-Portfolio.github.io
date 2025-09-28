@@ -1,0 +1,9 @@
+streamlit
+transformers
+torch
+torchvision
+Pillow
+opencv-python-headless
+mtcnn
+crewai
+langchain-huggingface
