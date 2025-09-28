@@ -21,3 +21,41 @@ Deepfakes spread misinformation and harm—our app detects them in real-time to 
 - **AI Agents**: CrewAI + LangChain-HuggingFace (Llama-3 endpoint)
 - **Deployment**: Ngrok for public demos
 
+## 📋 Setup & Run Locally
+1. Clone the repo:
+git clone https://github.com/lasyapriyavavilala/Lasyapriya-Portfolio.github.io.git
+cd Lasyapriya-Portfolio.github.io/Sunhack-Deepfake-Sentinel
+2. Install dependencies:
+pip install -r requirements.txt
+3. Set environment vars (get your HF token from huggingface.co):
+export HUGGINGFACEHUB_API_TOKEN="hf_your_token_here"
+4. Run the app:
+streamlit run streamlit_app.py
+
+## 🌐 Public Demo
+For live access (e.g., during judging):
+1. Install ngrok: `pip install pyngrok`
+2. Set your ngrok token: `ngrok.set_auth_token("your_ngrok_token")`
+3. In a script or terminal: `ngrok http 8501`
+4. Share the public URL (e.g., https://abc123.ngrok.io).
+
+**Note**: Replace tokens with env vars for security—never commit them!
+
+## 📸 Screenshots
+
+
+## 🏆 Accomplishments & Challenges
+- Integrated CrewAI for agent-based reasoning—turns raw detection into actionable insights.
+- Handled model caching in Streamlit for fast loads.
+- Challenge: API rate limits with HF—solved via endpoint optimization.
+
+## 🔮 Future Work
+- Video deepfake support.
+- Integrate with X/Twitter for real-time post scanning.
+- Mobile app via Streamlit sharing.
+
+## 📂 Files
+- `streamlit_app.py`: Main app logic.
+- `requirements.txt`: Dependencies.
+
+**Built with 💪 at SunHacks 2025 by Lasyapriya Vavilala.**
