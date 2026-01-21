@@ -1,0 +1,118 @@
+name: Weekly Breast Cancer Pipeline
+
+on:
+  schedule:
+    # Run every Sunday at 8 AM UTC (3 AM EST)
+    - cron: '0 8 * * 0'
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run pipeline
+        env:
+          # Twitter credentials
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
+          TWITTER_BEARER_TOKEN: ${{ secrets.TWITTER_BEARER_TOKEN }}
+          
+          # Anthropic API for Claude (Agents 2, 3, 4)
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          
+        run: |
+          python run_pipeline.py \
+            --target 70 \
+            --days-back 7 \
+            --polls-per-article 2 \
+            --grounding-threshold 0.60 \
+            --post-polls \
+            --post-limit 15 \
+            --post-interval 1 \
+            --no-dry-run
+      
+      - name: Upload Agent 1 Output (Scraped Articles)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent1-scraped-articles-${{ github.run_number }}
+          path: |
+            data/raw/scraped_articles_*.json
+          retention-days: 30
+      
+      - name: Upload Agent 2 Output (Enhanced Articles)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent2-enhanced-articles-${{ github.run_number }}
+          path: |
+            data/processed/enhanced_articles.json
+            data/processed/enhanced_articles.ndjson
+          retention-days: 30
+      
+      - name: Upload Agent 3 Output (Categorized Articles)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent3-categorized-articles-${{ github.run_number }}
+          path: |
+            data/processed/categorized_articles.json
+          retention-days: 30
+      
+      - name: Upload Agent 4 Output (Twitter Polls)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent4-twitter-polls-${{ github.run_number }}
+          path: |
+            data/outputs/twitter_polls.json
+          retention-days: 30
+      
+      - name: Upload Agent 5 Output (Database)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent5-post-database-${{ github.run_number }}
+          path: |
+            data/pharma_news.db
+          retention-days: 30
+      
+      - name: Upload Embeddings (Agent 3 FAISS Index)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: embeddings-${{ github.run_number }}
+          path: |
+            data/embeddings/*.index
+            data/embeddings/*.pkl
+          retention-days: 30
+      
+      - name: Upload Complete Dataset (All Agents)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: complete-pipeline-output-${{ github.run_number }}
+          path: |
+            data/raw/*.json
+            data/processed/*.json
+            data/processed/*.ndjson
+            data/outputs/*.json
+            data/embeddings/*
+            data/*.db
+          retention-days: 30
